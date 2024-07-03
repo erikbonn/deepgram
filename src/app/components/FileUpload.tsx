@@ -10,16 +10,13 @@ import type {
 } from "uploadthing/types";
 
 interface FileUploadProps {
-  files: ClientUploadedFileData<{ file: UploadedFileData }>[] | undefined;
+  files: ClientUploadedFileData<{ file: UploadedFileData }>[];
   setFiles: Dispatch<
-    SetStateAction<
-      ClientUploadedFileData<{ file: UploadedFileData }>[] | undefined
-    >
+    SetStateAction<ClientUploadedFileData<{ file: UploadedFileData }>[]>
   >;
 }
 
 export const FileUpload: React.FC<FileUploadProps> = ({ files, setFiles }) => {
-
   return (
     <div className="mr-10 mt-6 grid justify-items-end">
       <UploadButton
@@ -34,10 +31,7 @@ export const FileUpload: React.FC<FileUploadProps> = ({ files, setFiles }) => {
         }}
         endpoint="imageUploader"
         onClientUploadComplete={(res) => {
-          if (files) {
-            setFiles([...files, ...res]);
-          }
-          setFiles([...res]);
+          setFiles((prevFiles) => [...prevFiles, ...res]);
           // Do something with the response
           console.log("Files: ", res);
           alert("Upload Completed");

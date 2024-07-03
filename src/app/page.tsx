@@ -16,8 +16,10 @@ const cairo = Cairo({
 
 export default function HomePage() {
   const [files, setFiles] = useState<
-    ClientUploadedFileData<{ file: UploadedFileData }>[] | undefined
-  >();
+    ClientUploadedFileData<{ file: UploadedFileData }>[]
+  >([]);
+
+  console.log("files", files);
 
   return (
     <main className={cairo.className}>
