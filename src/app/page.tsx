@@ -18,16 +18,15 @@ export default function HomePage() {
   const [files, setFiles] = useState<
     ClientUploadedFileData<{ file: UploadedFileData }>[]
   >([]);
-  const [selectedFile, setSelectedFile] = useState<
-    ClientUploadedFileData<{ file: UploadedFileData }>
-  >([]);
+  const [selectedFile, setSelectedFile] =
+    useState<ClientUploadedFileData<{ file: UploadedFileData }>>();
   const [transcription, setTranscription] = useState<string | null>(null);
 
   console.log("files", files);
 
   const handleFileTranscription = async (url: string) => {
     if (url) {
-      console.log("transcibing for url", url);
+      console.log("transcibing for url: ", url);
       const transcriptionResponse = await fetch("/api/transcribe", {
         method: "POST",
         headers: {
@@ -37,12 +36,12 @@ export default function HomePage() {
       });
 
       if (transcriptionResponse.ok) {
-        console.log("made it here");
         // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
         const { result } = await transcriptionResponse.json();
         // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
         console.log("result", result);
         setTranscription(
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
           result?.results.channels[0].alternatives[0].transcript as string,
         );
       } else {
@@ -91,7 +90,7 @@ export default function HomePage() {
                 <td className="py-3 pl-3 ">
                   {(file?.size / 1000000).toFixed(1)}MB
                 </td>
-                <td className="py-3 pl-3 ">
+                <td className="py-3 pl-3">
                   <button
                     onClick={async () => {
                       setSelectedFile(file),
@@ -102,7 +101,7 @@ export default function HomePage() {
                     TRANSCRIBE
                   </button>
                 </td>
-                <td className="py-3 pl-3 ">
+                <td className="py-3 pl-3">
                   <a
                     href={file.url} // fix
                     target="_blank"

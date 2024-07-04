@@ -3,7 +3,6 @@ import React from "react";
 import type { Dispatch, SetStateAction } from "react";
 
 import { UploadButton } from "~/utils/uploadthing";
-// import type File from "../page";
 import type {
   ClientUploadedFileData,
   UploadedFileData,
@@ -15,6 +14,50 @@ interface FileUploadProps {
     SetStateAction<ClientUploadedFileData<{ file: UploadedFileData }>[]>
   >;
 }
+
+// interface UploadedFileData {
+//   // Define the properties of UploadedFileData
+//   // For example, you might have:
+//   name: string;
+//   size: number;
+//   type: string;
+//   blob: Blob;
+// }
+
+// async function getDuration(
+//   fileData: ClientUploadedFileData<{
+//     file: UploadedFileData;
+//   }>[],
+// ): Promise<number> {
+//   if (!fileData || fileData.length === 0) {
+//     throw new Error("No file provided");
+//   }
+//   // Assuming you are dealing with a single file, extract the first file from the array
+//   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+//   const file = fileData[0]?.file;
+
+//   if (!file) {
+//     throw new Error("No file provided");
+//   }
+
+//   // Convert the file to a Blob object
+//   const blob = new Blob([file]);
+
+//   // Create a URL for the Blob object
+//   const url = URL.createObjectURL(blob);
+
+//   return new Promise((resolve) => {
+//     const audio = document.createElement("audio");
+//     audio.muted = true;
+//     const source = document.createElement("source");
+//     source.src = url; // Blob URL
+//     audio.preload = "metadata";
+//     audio.appendChild(source);
+//     audio.onloadedmetadata = function () {
+//       resolve(audio.duration);
+//     };
+//   });
+// }
 
 export const FileUpload: React.FC<FileUploadProps> = ({ files, setFiles }) => {
   return (
@@ -30,8 +73,9 @@ export const FileUpload: React.FC<FileUploadProps> = ({ files, setFiles }) => {
           button: "Upload a File",
         }}
         endpoint="imageUploader"
-        onClientUploadComplete={(res) => {
+        onClientUploadComplete={async (res) => {
           setFiles((prevFiles) => [...prevFiles, ...res]);
+          //   await getDuration(res);
           // Do something with the response
           console.log("Files: ", res);
           alert("Upload Completed");
