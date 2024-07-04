@@ -1,7 +1,7 @@
 "use client";
 import { Cairo } from "@next/font/google";
 import { FileUpload } from "./components/FileUpload";
-import Transcription from "./components/Transcription";
+import { Transcription } from "./components/Transcription";
 import { useState } from "react";
 import type {
   ClientUploadedFileData,
@@ -18,8 +18,40 @@ export default function HomePage() {
   const [files, setFiles] = useState<
     ClientUploadedFileData<{ file: UploadedFileData }>[]
   >([]);
+  const [selectedFile, setSelectedFile] = useState<
+    ClientUploadedFileData<{ file: UploadedFileData }>
+  >([]);
+  const [transcription, setTranscription] = useState<string | null>(null);
 
   console.log("files", files);
+
+  const handleFileTranscription = async (url: string) => {
+    if (url) {
+      console.log("transcibing for url", url);
+      const transcriptionResponse = await fetch("/api/transcribe", {
+        method: "POST",
+        headers: {
+          "content-type": "application/json",
+        },
+        body: JSON.stringify({ url }),
+      });
+
+      if (transcriptionResponse.ok) {
+        console.log("made it here");
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+        const { result } = await transcriptionResponse.json();
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+        console.log("result", result);
+        setTranscription(
+          result?.results.channels[0].alternatives[0].transcript as string,
+        );
+      } else {
+        console.error("Transcription failed");
+      }
+    } else {
+      console.error("File upload failed");
+    }
+  };
 
   return (
     <main className={cairo.className}>
@@ -60,13 +92,15 @@ export default function HomePage() {
                   {(file?.size / 1000000).toFixed(1)}MB
                 </td>
                 <td className="py-3 pl-3 ">
-                  <a
-                    href={file.url} // fix
-                    target="_blank"
+                  <button
+                    onClick={async () => {
+                      setSelectedFile(file),
+                        await handleFileTranscription(file?.url);
+                    }}
                     className="text-blue font-black drop-shadow-2xl"
                   >
                     TRANSCRIBE
-                  </a>
+                  </button>
                 </td>
                 <td className="py-3 pl-3 ">
                   <a
@@ -82,7 +116,10 @@ export default function HomePage() {
           </tbody>
         </table>
       </div>
-      <Transcription />
+      <Transcription
+        transcription={transcription}
+        selectedFile={selectedFile}
+      />
     </main>
   );
 }
