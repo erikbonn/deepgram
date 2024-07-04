@@ -6,11 +6,11 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-export const config = {
-  api: {
-    bodyParser: false,
-  },
-};
+// export const config = {
+//   api: {
+//     bodyParser: false,
+//   },
+// };
 
 export async function POST(req: NextRequest) {
   try {
