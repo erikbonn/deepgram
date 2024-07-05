@@ -1,18 +1,12 @@
 "use client";
-import { Cairo } from "@next/font/google";
 import { FileUpload } from "./components/FileUpload";
 import { Transcription } from "./components/Transcription";
 import { useState } from "react";
+import { useFileTranscription } from "./hooks/useFileTranscription";
 import type {
   ClientUploadedFileData,
   UploadedFileData,
 } from "uploadthing/types";
-
-const cairo = Cairo({
-  weight: "400",
-  subsets: ["latin", "arabic", "latin-ext"],
-  display: "swap",
-});
 
 export default function HomePage() {
   const [files, setFiles] = useState<
@@ -20,40 +14,13 @@ export default function HomePage() {
   >([]);
   const [selectedFile, setSelectedFile] =
     useState<ClientUploadedFileData<{ file: UploadedFileData }>>();
-  const [transcription, setTranscription] = useState<string | null>(null);
 
   console.log("files", files);
 
-  const handleFileTranscription = async (url: string) => {
-    if (url) {
-      console.log("transcibing for url: ", url);
-      const transcriptionResponse = await fetch("/api/transcribe", {
-        method: "POST",
-        headers: {
-          "content-type": "application/json",
-        },
-        body: JSON.stringify({ url }),
-      });
-
-      if (transcriptionResponse.ok) {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-        const { result } = await transcriptionResponse.json();
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-        console.log("result", result);
-        setTranscription(
-          // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-          result?.results.channels[0].alternatives[0].transcript as string,
-        );
-      } else {
-        console.error("Transcription failed");
-      }
-    } else {
-      console.error("File upload failed");
-    }
-  };
+  const { transcription, handleFileTranscription } = useFileTranscription();
 
   return (
-    <main className={cairo.className}>
+    <main>
       <div className="flex flex-col">
         <div className="h-50 flex flex-col">
           <div className="my-4 flex justify-center text-xl font-black drop-shadow-2xl">
