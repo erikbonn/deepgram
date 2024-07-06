@@ -13,5 +13,6 @@ export const { GET, POST } = createRouteHandler({
   config: {
     uploadthingSecret: process.env.UPLOADTHING_SECRET,
     uploadthingId: process.env.UPLOADTHING_APP_ID,
+    callbackUrl: process.env.UPLOADTHING_URL,
   },
 });
