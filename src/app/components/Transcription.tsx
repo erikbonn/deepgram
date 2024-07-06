@@ -12,7 +12,6 @@ export const Transcription: React.FC<TranscriptionPropTypes> = ({
   transcription,
   selectedFile,
 }) => {
-  console.log("trans should be here", transcription);
   return (
     <div className="mx-10 my-6 flex flex-col">
       <label className="my-2 ml-3">

@@ -23,7 +23,7 @@ export default function HomePage() {
     <main>
       <div className="flex flex-col">
         <div className="h-50 flex flex-col">
-          <div className="my-4 flex justify-center text-xl font-black drop-shadow-2xl">
+          <div className="my-4 flex justify-center text-2xl font-black drop-shadow-2xl">
             Deepgram Audio Server
           </div>
           <FileUpload files={files} setFiles={setFiles} />
