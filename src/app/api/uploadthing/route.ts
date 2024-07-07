@@ -10,9 +10,9 @@ export const { GET, POST } = createRouteHandler({
   router: ourFileRouter,
 
   // Apply an (optional) custom config:
-  config: {
-    uploadthingSecret: process.env.UPLOADTHING_SECRET,
-    uploadthingId: process.env.UPLOADTHING_APP_ID,
-    callbackUrl: process.env.UPLOADTHING_URL,
-  },
+  //   config: {
+  //     uploadthingSecret: process.env.UPLOADTHING_SECRET,
+  //     uploadthingId: process.env.UPLOADTHING_APP_ID,
+  //     callbackUrl: process.env.UPLOADTHING_URL,
+  //   },
 });
