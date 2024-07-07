@@ -63,7 +63,7 @@ export const FileUpload: React.FC<FileUploadProps> = ({ files, setFiles }) => {
   return (
     <div className="mr-10 mt-6 grid justify-items-end">
       <UploadButton
-        className="ut-label: Upload a File"
+        className="ut-label: Upload a File ut-allowed-content:ut-uploading:text-orange-300"
         appearance={{
           container: "text-nowrap",
           button:
