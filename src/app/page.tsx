@@ -28,59 +28,69 @@ export default function HomePage() {
           </div>
           <FileUpload files={files} setFiles={setFiles} />
         </div>
-        <table className="mx-10 mb-10 table-auto">
-          <thead>
-            <tr className="border-b-2 border-solid border-black text-lg font-bold ">
-              <th className="py-2 pl-3 text-left">Filename</th>
-              <th className="py-2 pl-3 text-left ">Duration</th>
-              <th className="py-2 pl-3 text-left ">Size</th>
-              <th className="py-2 pl-3 text-left "></th>
-              <th className="py-2 pl-3 text-left "></th>
-            </tr>
-          </thead>
-          <tbody>
-            {files?.map((file) => (
-              <tr
-                key={file?.key}
-                className="border-b-2 border-solid border-gray-400"
-              >
-                <td className="py-3 pl-3 ">
-                  <a href={file.url} target="_blank">
-                    {file.name}
-                  </a>
-                </td>
-                <td className="py-3 pl-3 ">
-                  <a href={file.url} target="_blank">
-                    {file?.type}
-                  </a>
-                </td>
-                <td className="py-3 pl-3 ">
-                  {(file?.size / 1000000).toFixed(1)}MB
-                </td>
-                <td className="py-3 pl-3">
-                  <button
-                    onClick={async () => {
-                      setSelectedFile(file),
-                        await handleFileTranscription(file?.url);
-                    }}
-                    className="text-blue font-black drop-shadow-2xl"
-                  >
-                    TRANSCRIBE
-                  </button>
-                </td>
-                <td className="py-3 pl-3">
-                  <a
-                    href={file.url} // fix
-                    target="_blank"
-                    className="text-blue font-black drop-shadow-2xl"
-                  >
-                    DOWNLOAD
-                  </a>
-                </td>
+        <div className="mx-10 mb-10 overflow-x-auto">
+          <table className="min-w-full table-auto">
+            <thead>
+              <tr className="border-b-2 border-solid border-black text-lg font-bold ">
+                <th className="max-w-14 py-2 pl-3 text-left">Filename</th>
+                <th className="max-w-14 py-2 pl-3 text-left">Duration</th>
+                <th className="max-w-14 py-2 pl-3 text-left">Size</th>
+                <th className="max-w-14 py-2 pl-3 text-left"></th>
+                <th className="max-w-14 py-2 pl-3 text-left"></th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {files?.map((file) => (
+                <tr
+                  key={file?.key}
+                  className="border-b-2 border-solid border-gray-400"
+                >
+                  <td className="min-w-20 max-w-28  py-3 pl-3">
+                    <a
+                      href={file.url}
+                      target="_blank"
+                      className="block overflow-hidden text-ellipsis whitespace-nowrap"
+                    >
+                      {file.name}
+                    </a>
+                  </td>
+                  <td className="max-w-24 py-3 pl-3">
+                    <a
+                      href={file.url}
+                      target="_blank"
+                      className="block overflow-hidden text-ellipsis whitespace-nowrap"
+                    >
+                      {file?.type}
+                    </a>
+                  </td>
+                  <td className="max-w-24 py-3 pl-3">
+                    {(file?.size / 1000000).toFixed(1)}MB
+                  </td>
+                  <td className="max-w-24  py-3 pl-3">
+                    <button
+                      onClick={async () => {
+                        setSelectedFile(file),
+                          await handleFileTranscription(file?.url);
+                      }}
+                      className="text-blue font-black drop-shadow-2xl"
+                    >
+                      TRANSCRIBE
+                    </button>
+                  </td>
+                  <td className="max-w-24 py-3 pl-3">
+                    <a
+                      href={file.url}
+                      target="_blank"
+                      className="text-blue font-black drop-shadow-2xl"
+                    >
+                      DOWNLOAD
+                    </a>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
       <Transcription
         transcription={transcription}
