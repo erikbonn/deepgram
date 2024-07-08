@@ -3,17 +3,21 @@ import { FileUpload } from "./components/FileUpload";
 import { Transcription } from "./components/Transcription";
 import { useState } from "react";
 import { useFileTranscription } from "./hooks/useFileTranscription";
-import type {
-  ClientUploadedFileData,
-  UploadedFileData,
-} from "uploadthing/types";
+
+export type File = {
+  name: string;
+  size: number;
+  key: string;
+  serverData?: File | undefined;
+  url: string;
+  customId: string | null;
+  type: string;
+  duration?: string;
+};
 
 export default function HomePage() {
-  const [files, setFiles] = useState<
-    ClientUploadedFileData<{ file: UploadedFileData }>[]
-  >([]);
-  const [selectedFile, setSelectedFile] =
-    useState<ClientUploadedFileData<{ file: UploadedFileData }>>();
+  const [files, setFiles] = useState<File[]>([]);
+  const [selectedFile, setSelectedFile] = useState<File | undefined>(undefined);
 
   console.log("files", files);
 
@@ -40,37 +44,34 @@ export default function HomePage() {
               </tr>
             </thead>
             <tbody>
-              {files?.map((file) => (
+              {files.map((file) => (
                 <tr
-                  key={file?.key}
+                  key={file.key}
                   className="border-b-2 border-solid border-gray-400"
                 >
                   <td className="min-w-20 max-w-28  py-3 pl-3">
                     <a
                       href={file.url}
                       target="_blank"
+                      rel="noopener noreferrer"
                       className="block overflow-hidden text-ellipsis whitespace-nowrap"
                     >
                       {file.name}
                     </a>
                   </td>
                   <td className="max-w-24 py-3 pl-3">
-                    <a
-                      href={file.url}
-                      target="_blank"
-                      className="block overflow-hidden text-ellipsis whitespace-nowrap"
-                    >
-                      {file?.type}
-                    </a>
+                    <span className="block overflow-hidden text-ellipsis whitespace-nowrap">
+                      {file?.duration}
+                    </span>
                   </td>
                   <td className="max-w-24 py-3 pl-3">
-                    {(file?.size / 1000000).toFixed(1)}MB
+                    {(file.size / 1000000).toFixed(1)}MB
                   </td>
                   <td className="max-w-24  py-3 pl-3">
                     <button
                       onClick={async () => {
-                        setSelectedFile(file),
-                          await handleFileTranscription(file?.url);
+                        setSelectedFile(file);
+                        await handleFileTranscription(file.url);
                       }}
                       className="text-blue font-black drop-shadow-2xl"
                     >

@@ -1,11 +1,8 @@
-import type {
-  ClientUploadedFileData,
-  UploadedFileData,
-} from "uploadthing/types";
+import type { File } from "../page";
 
 type TranscriptionPropTypes = {
   transcription: string | null;
-  selectedFile: ClientUploadedFileData<{ file: UploadedFileData }> | undefined;
+  selectedFile: File | undefined;
 };
 
 export const Transcription: React.FC<TranscriptionPropTypes> = ({

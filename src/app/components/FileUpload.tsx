@@ -3,17 +3,18 @@ import React from "react";
 import type { Dispatch, SetStateAction } from "react";
 
 import { UploadButton } from "~/utils/uploadthing";
-import type {
-  ClientUploadedFileData,
-  UploadedFileData,
-} from "uploadthing/types";
-
+import { getAudioDuration } from "~/utils/getAudioDuration";
+import type { File } from "../page";
 interface FileUploadProps {
-  files: ClientUploadedFileData<{ file: UploadedFileData }>[];
-  setFiles: Dispatch<
-    SetStateAction<ClientUploadedFileData<{ file: UploadedFileData }>[]>
-  >;
+  files: File[];
+  setFiles: Dispatch<SetStateAction<File[]>>;
 }
+// interface FileUploadProps {
+//   files: ClientUploadedFileData<{ file: UploadedFileData }>[];
+//   setFiles: Dispatch<
+//     SetStateAction<ClientUploadedFileData<{ file: UploadedFileData }>[]>
+//   >;
+// }
 
 // interface UploadedFileData {
 //   // Define the properties of UploadedFileData
@@ -74,10 +75,27 @@ export const FileUpload: React.FC<FileUploadProps> = ({ files, setFiles }) => {
         }}
         endpoint="imageUploader"
         onClientUploadComplete={async (res) => {
-          setFiles((prevFiles) => [...prevFiles, ...res]);
-          //   await getDuration(res);
-          // Do something with the response
-          console.log("Files: ", res);
+          const newFiles = await Promise.all(
+            res.map(async (fileRes) => {
+              const fileBlob = await fetch(fileRes.url).then((r) => r.blob());
+              const file = new File([fileBlob], fileRes.name, {
+                type: fileRes.type,
+              });
+              const duration = await getAudioDuration(file); // grabbing duration and setting it on file
+              return {
+                name: fileRes.name,
+                size: fileRes.size,
+                key: fileRes.key,
+                url: fileRes.url,
+                customId: null,
+                type: fileRes.type || "unknown",
+                duration: duration,
+              };
+            }),
+          );
+
+          setFiles((prevFiles) => [...prevFiles, ...newFiles]);
+          console.log("Files: ", newFiles);
           alert("Upload Completed");
         }}
         onUploadError={(error: Error) => {
@@ -86,25 +104,26 @@ export const FileUpload: React.FC<FileUploadProps> = ({ files, setFiles }) => {
         }}
       />
     </div>
-
-    // My way
-    // <form
-    //   onSubmit={() => handleFormSubmit()}
-    //   className="mr-10 mt-6 grid justify-items-end"
-    // >
-    //   <input id="upload-files" hidden type="file" accept="audio/*" />
-    //   <label
-    //     htmlFor="upload-files"
-    //     className="bg-green cursor-pointer rounded px-10 py-2 text-white shadow-lg"
-    //   >
-    //     Upload A File
-    //   </label>
-    //   {/* <button
-    //     type="submit"
-    //     className="bg-green rounded px-10 py-1 text-white shadow-lg "
-    //   >
-    //     Upload A File
-    //   </button> */}
-    // </form>
   );
 };
+
+// original way without uploadthing
+//
+// <form
+//   onSubmit={() => handleFormSubmit()}
+//   className="mr-10 mt-6 grid justify-items-end"
+// >
+//   <input id="upload-files" hidden type="file" accept="audio/*" />
+//   <label
+//     htmlFor="upload-files"
+//     className="bg-green cursor-pointer rounded px-10 py-2 text-white shadow-lg"
+//   >
+//     Upload A File
+//   </label>
+//   {/* <button
+//     type="submit"
+//     className="bg-green rounded px-10 py-1 text-white shadow-lg "
+//   >
+//     Upload A File
+//   </button> */}
+// </form>
