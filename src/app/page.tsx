@@ -3,6 +3,7 @@ import { FileUpload } from "./components/FileUpload";
 import { Transcription } from "./components/Transcription";
 import { useState } from "react";
 import { useFileTranscription } from "./hooks/useFileTranscription";
+import { handleDownload } from "../utils/handleDownload";
 
 export type File = {
   name: string;
@@ -59,7 +60,7 @@ export default function HomePage() {
                       {file.name}
                     </a>
                   </td>
-                  <td className="max-w-24 py-3 pl-3">
+                  <td className="max-w-28 py-3 pl-3">
                     <span className="block overflow-hidden text-ellipsis whitespace-nowrap">
                       {file?.duration}
                     </span>
@@ -79,13 +80,21 @@ export default function HomePage() {
                     </button>
                   </td>
                   <td className="max-w-24 py-3 pl-3">
-                    <a
-                      href={file.url}
-                      target="_blank"
-                      className="text-blue font-black drop-shadow-2xl"
+                    <button
+                      disabled={
+                        selectedFile === file && transcription ? false : true
+                      }
+                      onClick={() => {
+                        console.log(
+                          "totototot ",
+                          selectedFile === file && transcription ? true : false,
+                        );
+                        handleDownload(selectedFile, transcription);
+                      }}
+                      className="text-blue cursor-pointer font-black drop-shadow-2xl"
                     >
                       DOWNLOAD
-                    </a>
+                    </button>
                   </td>
                 </tr>
               ))}
