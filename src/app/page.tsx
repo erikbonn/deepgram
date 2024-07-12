@@ -3,7 +3,7 @@ import { FileUpload } from "./components/FileUpload";
 import { Transcription } from "./components/Transcription";
 import { useState } from "react";
 import { useFileTranscription } from "./hooks/useFileTranscription";
-import { handleDownload } from "../utils/handleDownload";
+import { handleTranscriptionDownload } from "../utils/handleTranscriptionDownload";
 
 export type File = {
   name: string;
@@ -80,21 +80,28 @@ export default function HomePage() {
                     </button>
                   </td>
                   <td className="max-w-24 py-3 pl-3">
-                    <button
-                      disabled={
-                        selectedFile === file && transcription ? false : true
-                      }
-                      onClick={() => {
-                        console.log(
-                          "totototot ",
-                          selectedFile === file && transcription ? true : false,
-                        );
-                        handleDownload(selectedFile, transcription);
-                      }}
-                      className="text-blue cursor-pointer font-black drop-shadow-2xl"
-                    >
-                      DOWNLOAD
-                    </button>
+                    {selectedFile === file && transcription ? (
+                      <a
+                        href="#"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          handleTranscriptionDownload(file, transcription);
+                        }}
+                        className="text-blue cursor-pointer font-black drop-shadow-2xl"
+                      >
+                        DOWNLOAD
+                      </a>
+                    ) : (
+                      <a
+                        href="#"
+                        onClick={(e) => {
+                          console.error("No transcription to download!");
+                        }}
+                        className="text-blue cursor-pointer font-black drop-shadow-2xl"
+                      >
+                        DOWNLOAD TRANSCRIPTION
+                      </a>
+                    )}
                   </td>
                 </tr>
               ))}
