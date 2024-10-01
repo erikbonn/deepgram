@@ -1,3 +1,5 @@
+This is a Frontend application that allows you to upload an audio file and then transcribe it into text that can be downloaded. I utilized UploadThing's file uploadloader/storage (think S3 wrapper) and Deepgram's API to basically make this a frontend only application deployed to Vercel using the T3 stack (see below for more info on T3). 
+
 # Create T3 App
 
 This is a [T3 Stack](https://create.t3.gg/) project bootstrapped with `create-t3-app`.
