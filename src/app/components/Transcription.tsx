@@ -17,7 +17,7 @@ export const Transcription: React.FC<TranscriptionPropTypes> = ({
       <textarea
         readOnly
         className={`h-80 resize-none rounded border-2 border-solid border-gray-400 p-3 ${transcription ? "text-slate-800" : "text-slate-400"}`}
-        value={transcription ? transcription : "Transcribing..."}
+        value={transcription ? transcription : "Click transcribe to view the transcription here"}
       ></textarea>
     </div>
   );
